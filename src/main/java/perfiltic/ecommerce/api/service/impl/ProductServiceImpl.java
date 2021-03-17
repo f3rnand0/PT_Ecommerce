@@ -55,13 +55,18 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> productToInsert =
                 Optional.ofNullable(productRepository.findByName(productDto.getName()));
         if (productToInsert.isEmpty()) {
-            Product product = new Product()
-                    .setName(productDto.getName())
-                    .setDescription(productDto.getDescription())
-                    .setWeight(productDto.getWeight())
-                    .setPrice(productDto.getPrice());
-            productRepository.save(product);
-            return modelMapper.map(product, ProductDto.class);
+            Optional<Category> category = categoryRepository.findById(productDto.getCategoryId());
+            if (category.isPresent()) {
+                Product product = new Product()
+                        .setCategory(category.get())
+                        .setName(productDto.getName())
+                        .setDescription(productDto.getDescription())
+                        .setWeight(productDto.getWeight())
+                        .setPrice(productDto.getPrice());
+                productRepository.save(product);
+                return modelMapper.map(product, ProductDto.class);
+            } else
+                throw new EntityNotFoundException("Category not found: " + productDto.getCategoryId());
         }
         throw new DataIntegrityViolationException("Product already exists: " + productDto.getName());
     }
@@ -70,15 +75,20 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto updateProduct(ProductDto productDto) {
         Optional<Product> product = Optional.ofNullable(productRepository.findByName(productDto.getName()));
         if (product.isPresent()) {
-            Product newProduct = new Product()
-                    .setId(product.get().getId())
-                    .setName(productDto.getName())
-                    .setDescription(productDto.getDescription())
-                    .setWeight(productDto.getWeight())
-                    .setPrice(productDto.getPrice());
+            Optional<Category> category = categoryRepository.findById(productDto.getCategoryId());
+            if (category.isPresent()) {
+                Product newProduct = new Product()
+                        .setId(product.get().getId())
+                        .setCategory(category.get())
+                        .setName(productDto.getName())
+                        .setDescription(productDto.getDescription())
+                        .setWeight(productDto.getWeight())
+                        .setPrice(productDto.getPrice());
 
-            productRepository.save(newProduct);
-            return modelMapper.map(newProduct, ProductDto.class);
+                productRepository.save(newProduct);
+                return modelMapper.map(newProduct, ProductDto.class);
+            } else
+                throw new EntityNotFoundException("Category not found: " + productDto.getCategoryId());
         }
         throw new EntityNotFoundException("Product not found: " + productDto.getName());
     }
@@ -92,8 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductPhotoDto addProductPhoto(ProductPhotoDto productPhotoDto) {
-        Optional<Product> product =
-                productRepository.findById(productPhotoDto.getProductId());
+        Optional<Product> product = productRepository.findById(productPhotoDto.getProductId());
         if (product.isPresent()) {
             ProductPhoto productPhoto = new ProductPhoto()
                     .setProduct(product.get())
@@ -106,8 +115,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductPhotoDto updateProductPhoto(ProductPhotoDto productPhotoDto) {
-        Optional<Product> product =
-                productRepository.findById(productPhotoDto.getProductId());
+        Optional<Product> product = productRepository.findById(productPhotoDto.getProductId());
         if (product.isPresent()) {
             Optional<ProductPhoto> productPhoto =
                     productPhotoRepository.findById(productPhotoDto.getId());
@@ -122,25 +130,5 @@ public class ProductServiceImpl implements ProductService {
                 throw new EntityNotFoundException("Product photo not found: " + productPhotoDto.getId());
         }
         throw new EntityNotFoundException("Product not found: " + productPhotoDto.getProductId());
-    }
-
-    @Override
-    public ProductDto addProductCategory(ProductDto productDto) {
-        Optional<Product> product =
-                productRepository.findById(productDto.getId());
-        if (product.isPresent()) {
-            Optional<Category> productCategory =
-                    categoryRepository.findById(productDto.ge;
-            if (productCategory.isPresent()) {
-                Product productPhoto = new ProductPhoto()
-                        .setProduct(product.get())
-                        .setPhoto(productDto.getPhoto());
-                productPhotoRepository.save(productPhoto);
-                return modelMapper.map(productPhoto, ProductPhotoDto.class);
-            } else
-                throw new EntityNotFoundException("Product photo not found: " + productPhotoDto.getId());
-
-        }
-        throw new EntityNotFoundException("Product not found: " + productDto.getProductId());
     }
 }

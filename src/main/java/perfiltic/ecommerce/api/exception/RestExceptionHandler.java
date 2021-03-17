@@ -109,20 +109,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Handles ApiException. Created to encapsulate errors with more detail than perfiltic.ecommerce.api
-     * .exception.ApiException
-     *
-     * @param ex the ApiException
-     * @return the ApiError object
-     */
-    @ExceptionHandler(ApiException.class)
-    protected ResponseEntity<Object> handleRuntime(ApiException ex) {
-        ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
-
-    /**
      * Handles PersistenceException. Created to encapsulate errors with more detail than javax
      * .persistence.PersistenceException.
      *

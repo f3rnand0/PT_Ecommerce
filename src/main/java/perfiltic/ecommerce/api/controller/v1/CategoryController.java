@@ -3,8 +3,6 @@ package perfiltic.ecommerce.api.controller.v1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import perfiltic.ecommerce.api.dto.model.CategoryDto;
-import perfiltic.ecommerce.api.dto.model.ProductDto;
-import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 import perfiltic.ecommerce.api.dto.response.Response;
 import perfiltic.ecommerce.api.service.api.CategoryService;
 

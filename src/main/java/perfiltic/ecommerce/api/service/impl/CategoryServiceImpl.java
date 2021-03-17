@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import perfiltic.ecommerce.api.dto.model.CategoryDto;
-import perfiltic.ecommerce.api.dto.model.ProductDto;
-import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 import perfiltic.ecommerce.api.model.Category;
-import perfiltic.ecommerce.api.model.Product;
-import perfiltic.ecommerce.api.model.ProductPhoto;
 import perfiltic.ecommerce.api.repository.CategoryRepository;
 import perfiltic.ecommerce.api.service.api.CategoryService;
 
@@ -61,7 +57,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto) {
-        Optional<Category> category = Optional.ofNullable(categoryRepository.findByName(categoryDto.getName()));
+        Optional<Category> category =
+                Optional.ofNullable(categoryRepository.findByName(categoryDto.getName()));
         if (category.isPresent()) {
             Category newCategory = new Category()
                     .setId(category.get().getId())

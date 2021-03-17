@@ -1,8 +1,6 @@
 package perfiltic.ecommerce.api.service.api;
 
 import perfiltic.ecommerce.api.dto.model.CategoryDto;
-import perfiltic.ecommerce.api.dto.model.ProductDto;
-import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 
 import java.util.List;
 

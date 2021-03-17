@@ -88,7 +88,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>cobis.component.inventory.tool.backend.CCITApplication</mainClass>
+                            <mainClass>perfiltic.ecommerce.api.PTECApplication</mainClass>
                         </configuration>
                     </execution>
                 </executions>

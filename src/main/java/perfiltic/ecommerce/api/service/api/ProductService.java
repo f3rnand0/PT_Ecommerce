@@ -19,6 +19,4 @@ public interface ProductService {
     ProductPhotoDto addProductPhoto(ProductPhotoDto productPhotoDto);
 
     ProductPhotoDto updateProductPhoto(ProductPhotoDto productPhotoDto);
-
-    ProductDto addProductCategory(ProductCategoryDto productDto);
 }

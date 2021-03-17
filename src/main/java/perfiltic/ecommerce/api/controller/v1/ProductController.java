@@ -2,7 +2,6 @@ package perfiltic.ecommerce.api.controller.v1;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import perfiltic.ecommerce.api.dto.model.ProductCategoryDto;
 import perfiltic.ecommerce.api.dto.model.ProductDto;
 import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 import perfiltic.ecommerce.api.dto.response.Response;
@@ -52,8 +51,4 @@ public class ProductController {
         return Response.ok().setPayload(productService.updateProductPhoto(productPhotoDto));
     }
 
-    @PostMapping("/add")
-    public Response addProductCategory(@Valid @RequestBody ProductCategoryDto productCategoryDto) {
-        return Response.ok().setPayload(productService.addProductCategory(productCategoryDto));
-    }
 }

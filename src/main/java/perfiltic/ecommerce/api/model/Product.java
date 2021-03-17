@@ -26,7 +26,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductPhoto> productPhotos = new ArrayList<>();
 
-    @OneToOne(mappedBy = "category")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     private String name;

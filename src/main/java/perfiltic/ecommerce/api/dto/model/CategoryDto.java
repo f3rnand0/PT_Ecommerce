@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.Accessors;
 import perfiltic.ecommerce.api.model.Category;
-import perfiltic.ecommerce.api.model.Product;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +20,6 @@ public class CategoryDto {
 
     @EqualsAndHashCode.Include
     private Long id;
-    private Product product;
     private Category category;
     @NotNull
     private String name;

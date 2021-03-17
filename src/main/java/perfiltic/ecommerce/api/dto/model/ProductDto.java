@@ -21,6 +21,10 @@ public class ProductDto {
     @EqualsAndHashCode.Include
     private Long id;
     @NotNull
+    private Long categoryId;
+    @NotNull
+    private String categoryName;
+    @NotNull
     private String name;
     private String description;
     private BigDecimal weight;
