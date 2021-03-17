@@ -1,0 +1,25 @@
+logging:
+  level:
+    org:
+      hibernate:
+        type: trace
+server:
+  servlet:
+    context-path: /PTEC-API
+  port: 9080
+spring:
+  banner:
+    location: classpath:/banner/banner.txt
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    password: mariadb
+    url: jdbc:mariadb://127.0.0.1:3306/ptec?serverTimezone=UTC&useLegacyDatetimeCode=false
+    username: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDB103Dialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    show-sql: true
