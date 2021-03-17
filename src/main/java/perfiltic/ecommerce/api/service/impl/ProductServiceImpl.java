@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import perfiltic.ecommerce.api.currency.consumer.CurrencyQuotes;
+import perfiltic.ecommerce.api.dto.external.currency.Quotes;
 import perfiltic.ecommerce.api.dto.model.ProductDto;
 import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 import perfiltic.ecommerce.api.model.Category;
@@ -15,6 +17,7 @@ import perfiltic.ecommerce.api.repository.ProductRepository;
 import perfiltic.ecommerce.api.service.api.ProductService;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,9 +48,17 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isPresent()) {
-            return modelMapper.map(product.get(), ProductDto.class);
+            ProductDto productDto = modelMapper.map(product.get(), ProductDto.class);
+            productDto.setPriceConverted(convertUSDTOCOP(productDto.getPrice()));
+            return productDto;
         }
         throw new EntityNotFoundException("Product not found: " + id);
+    }
+
+    private BigDecimal convertUSDTOCOP (BigDecimal price) {
+        CurrencyQuotes currencyQuotes = new CurrencyQuotes();
+        currencyQuotes.convertUSDToCOP();
+        return price.multiply(new BigDecimal(currencyQuotes.quotes.getUSDCOP()));
     }
 
     @Override

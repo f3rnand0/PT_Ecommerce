@@ -29,5 +29,6 @@ public class ProductDto {
     private String description;
     private BigDecimal weight;
     private BigDecimal price;
+    private BigDecimal priceConverted;
 
 }

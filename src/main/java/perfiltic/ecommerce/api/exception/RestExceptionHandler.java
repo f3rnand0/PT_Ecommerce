@@ -15,6 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -118,6 +119,20 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(PersistenceException.class)
     protected ResponseEntity<Object> handlePersistenceException(PersistenceException ex) {
         ApiError apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    /**
+     * Handles PersistenceException. Created to encapsulate errors with more detail than org
+     * .springframework.web.clientRestClientException
+     *
+     * @param ex the RestClientException
+     * @return the ApiError object
+     */
+    @ExceptionHandler(RestClientException.class)
+    protected ResponseEntity<Object> handleRestClientException(RestClientException ex) {
+        ApiError apiError = new ApiError(INTERNAL_SERVER_ERROR);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
