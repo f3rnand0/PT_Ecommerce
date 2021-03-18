@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import perfiltic.ecommerce.api.currency.consumer.CurrencyQuotes;
-import perfiltic.ecommerce.api.dto.external.currency.Quotes;
 import perfiltic.ecommerce.api.dto.model.ProductDto;
 import perfiltic.ecommerce.api.dto.model.ProductPhotoDto;
 import perfiltic.ecommerce.api.model.Category;
@@ -39,9 +38,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream()
+        List<ProductDto> productDtoList = productRepository.findAll().stream()
                 .map(product -> modelMapper.map(product, ProductDto.class))
                 .collect(Collectors.toList());
+        productDtoList
+                .forEach(productDto -> productDto.setPriceConverted(convertUSDTOCOP(productDto.getPrice())));
+        return productDtoList;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
         throw new EntityNotFoundException("Product not found: " + id);
     }
 
-    private BigDecimal convertUSDTOCOP (BigDecimal price) {
+    private BigDecimal convertUSDTOCOP(BigDecimal price) {
         CurrencyQuotes currencyQuotes = new CurrencyQuotes();
         currencyQuotes.convertUSDToCOP();
         return price.multiply(new BigDecimal(currencyQuotes.quotes.getUSDCOP()));
@@ -141,5 +143,15 @@ public class ProductServiceImpl implements ProductService {
                 throw new EntityNotFoundException("Product photo not found: " + productPhotoDto.getId());
         }
         throw new EntityNotFoundException("Product not found: " + productPhotoDto.getProductId());
+    }
+
+    @Override
+    public List<ProductDto> getProductsByCategoryId(Long categoryId) {
+        List<ProductDto> productDtoList = productRepository.findByCategoryId(categoryId).stream()
+                .map(product -> modelMapper.map(product, ProductDto.class))
+                .collect(Collectors.toList());
+        productDtoList
+                .forEach(productDto -> productDto.setPriceConverted(convertUSDTOCOP(productDto.getPrice())));
+        return productDtoList;
     }
 }

@@ -23,11 +23,9 @@ public class CurrencyQuotes {
 
     final Map<String, ScheduledFuture<String>> cacheVariables =
             new HashMap<String, ScheduledFuture<String>>();
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
-    public Quotes quotes;
-
     private final String currencies = "USD,COP";
+    public Quotes quotes;
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public CurrencyQuotes() {
         sendRequest();

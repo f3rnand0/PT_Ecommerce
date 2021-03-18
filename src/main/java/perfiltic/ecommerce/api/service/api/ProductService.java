@@ -19,4 +19,6 @@ public interface ProductService {
     ProductPhotoDto addProductPhoto(ProductPhotoDto productPhotoDto);
 
     ProductPhotoDto updateProductPhoto(ProductPhotoDto productPhotoDto);
+
+    List<ProductDto> getProductsByCategoryId(Long categoryId);
 }

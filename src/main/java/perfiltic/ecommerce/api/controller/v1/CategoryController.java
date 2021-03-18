@@ -15,9 +15,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/list")
-    public Response getAllCategories() {
-        return Response.ok().setPayload(categoryService.getAllCategories());
+    @GetMapping("/list/{id}")
+    public Response getAllCategories(@PathVariable("id") Long id) {
+        return Response.ok().setPayload(categoryService.getAllCategories(id));
     }
 
     @GetMapping(value = "/{id}")

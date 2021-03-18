@@ -15,6 +15,9 @@ spring:
     password: mariadb
     url: jdbc:mariadb://127.0.0.1:3306/ptec?serverTimezone=UTC&useLegacyDatetimeCode=false
     username: root
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
   jpa:
     properties:
       hibernate:

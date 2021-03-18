@@ -5,7 +5,7 @@ import perfiltic.ecommerce.api.dto.model.CategoryDto;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDto> getAllCategories();
+    List<CategoryDto> getAllCategories(Long id);
 
     CategoryDto getCategoryById(Long id);
 

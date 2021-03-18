@@ -51,4 +51,9 @@ public class ProductController {
         return Response.ok().setPayload(productService.updateProductPhoto(productPhotoDto));
     }
 
+    @GetMapping(value = "/category/{categoryId}")
+    public Response getProductsByCategoryId(@PathVariable("categoryId") Long categoryId) {
+        return Response.ok().setPayload(productService.getProductsByCategoryId(categoryId));
+    }
+
 }

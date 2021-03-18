@@ -24,10 +24,15 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(category -> modelMapper.map(category, CategoryDto.class))
-                .collect(Collectors.toList());
+    public List<CategoryDto> getAllCategories(Long id) {
+        if (id == 0)
+            return categoryRepository.findAllParents().stream()
+                    .map(category -> modelMapper.map(category, CategoryDto.class))
+                    .collect(Collectors.toList());
+        else
+            return categoryRepository.findAllChildren(id).stream()
+                    .map(category -> modelMapper.map(category, CategoryDto.class))
+                    .collect(Collectors.toList());
     }
 
     @Override
@@ -42,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto addCategory(CategoryDto categoryDto) {
         Optional<Category> categoryToInsert =
-                Optional.ofNullable(categoryRepository.findByName(categoryDto.getName()));
+                Optional.ofNullable(categoryRepository.findByName(categoryDto.getName(),
+                                                                  categoryDto.getCategory().getId()));
         if (categoryToInsert.isEmpty()) {
             Category category = new Category()
                     .setName(categoryDto.getName())
@@ -52,13 +58,16 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.save(category);
             return modelMapper.map(category, CategoryDto.class);
         }
-        throw new DataIntegrityViolationException("Category already exists: " + categoryDto.getId());
+        throw new DataIntegrityViolationException(
+                "Category already exists: name: " + categoryDto.getName() + ", parentid: " +
+                categoryDto.getCategory().getId());
     }
 
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto) {
         Optional<Category> category =
-                Optional.ofNullable(categoryRepository.findByName(categoryDto.getName()));
+                Optional.ofNullable(categoryRepository.findByName(categoryDto.getName(),
+                                                                  categoryDto.getCategory().getId()));
         if (category.isPresent()) {
             Category newCategory = new Category()
                     .setId(category.get().getId())
@@ -70,7 +79,9 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.save(newCategory);
             return modelMapper.map(newCategory, CategoryDto.class);
         }
-        throw new EntityNotFoundException("Category not found: " + categoryDto.getName());
+        throw new EntityNotFoundException(
+                "Category not found: name: " + categoryDto.getName() + ", parentid: " +
+                categoryDto.getCategory().getId());
     }
 
 }
